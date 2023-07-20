@@ -124,6 +124,11 @@ ihpFlake:
 
             devenv.shells.default = lib.mkIf cfg.enable {
                 packages = [ ghcCompiler.ihp pkgs.postgresql_13 ] ++ cfg.packages;
+                apps.default = {
+                    type = "app";
+                    program = "${ghcCompiler.ihp}/bin/migrate";
+                };
+
 
                 /*
                 we currently don't use devenv containers, and they break nix flake show
