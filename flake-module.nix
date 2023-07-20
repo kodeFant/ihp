@@ -122,12 +122,14 @@ ihpFlake:
                 };
             };
 
+            apps.migrate = {
+                type = "app";
+                program = "${ghcCompiler.ihp}/bin/migrate";
+            };
+
             devenv.shells.default = lib.mkIf cfg.enable {
                 packages = [ ghcCompiler.ihp pkgs.postgresql_13 ] ++ cfg.packages;
-                apps.default = {
-                    type = "app";
-                    program = "${ghcCompiler.ihp}/bin/migrate";
-                };
+
 
 
                 /*
