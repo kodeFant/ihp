@@ -19,6 +19,7 @@ import IHP.RouterSupport (frontControllerToWAIApp, FrontController, webSocketApp
 import IHP.ErrorController
 import qualified IHP.AutoRefresh as AutoRefresh
 import qualified IHP.AutoRefresh.Types as AutoRefresh
+import qualified IHP.LocalRefresh as LocalRefresh
 import IHP.LibDir
 import qualified IHP.Job.Runner as Job
 import qualified IHP.Job.Types as Job
@@ -51,9 +52,10 @@ run configBuilder = do
                 sessionVault <- Vault.newKey
 
                 autoRefreshServer <- newIORef (AutoRefresh.newAutoRefreshServer pgListener)
+                localRefreshServer <- newIORef (LocalRefresh.newLocalRefreshServer pgListener)
 
                 let ?modelContext = modelContext
-                let ?applicationContext = ApplicationContext { modelContext = ?modelContext, session = sessionVault, autoRefreshServer, frameworkConfig, pgListener }
+                let ?applicationContext = ApplicationContext { modelContext = ?modelContext, session = sessionVault, autoRefreshServer, localRefreshServer, frameworkConfig, pgListener }
 
                 sessionMiddleware <- initSessionMiddleware sessionVault frameworkConfig
                 staticApp <- initStaticApp frameworkConfig
